@@ -7,7 +7,7 @@ function Navbar() {
 
   return (
     <nav className="bg-white shadow">
-      <div className="max-w-screen-xl mx-auto">
+      <div className="">
         {/* Top row */}
         <div className="flex items-center justify-between">
           {/* Left: Logo + Navigation (desktop) */}
@@ -28,7 +28,7 @@ function Navbar() {
           </div>
 
           {/* Right: Profile (desktop) and Hamburger (mobile) */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 mr-7">
             {/* Hamburger - mobile only */}
             <button
               className="md:hidden text-gray-700"
