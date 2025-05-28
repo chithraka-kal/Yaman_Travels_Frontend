@@ -1,6 +1,7 @@
+import { useState } from "react";
 import logo from "../assets/logo.png";
 import user from "../assets/user.jpg";
-import { useState } from "react";
+
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -20,10 +21,11 @@ function Navbar() {
             {/* Navigation - desktop only */}
             <div className="hidden md:flex md:items-center md:space-x-6">
               <a href="#" className="text-black">Home</a>
-              <a href="#" className="text-gray-500 hover:text-black">About</a>
+              <a href="#" className="text-gray-500 hover:text-black">Destinations</a>
+              <a href="#" className="text-gray-500 hover:text-black">Packages</a>
               <a href="#" className="text-gray-500 hover:text-black">Services</a>
-              <a href="#" className="text-gray-500 hover:text-black">Pricing</a>
-              <a href="#" className="text-gray-500 hover:text-black">Contact</a>
+              <a href="#" className="text-gray-500 hover:text-black">About Us</a>
+              <a href="#" className="text-gray-500 hover:text-black">Contact Us</a>
             </div>
           </div>
 
