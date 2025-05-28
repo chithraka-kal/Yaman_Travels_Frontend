@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import img1 from '../assets/seegiriya.jpg';
 
 const destinations = [
@@ -21,9 +22,8 @@ const DestinationCard = () => {
 
   const totalCards = destinations.length;
   const extendedDestinations = [...destinations, ...destinations.slice(0, VISIBLE_CARDS)];
-  const maxIndex = totalCards; // we scroll to the clones, then jump back
+  const maxIndex = totalCards;
 
-  // Start auto scroll
   const startAutoSlide = () => {
     intervalRef.current = setInterval(() => {
       setCurrentIndex(prev => prev + 1);
@@ -31,23 +31,20 @@ const DestinationCard = () => {
     }, 5000);
   };
 
-  // Initial start
   useEffect(() => {
     startAutoSlide();
     return () => clearInterval(intervalRef.current);
   }, []);
 
-  // Handle looping logic
   useEffect(() => {
     if (currentIndex === maxIndex) {
       setTimeout(() => {
         setIsTransitioning(false);
         setCurrentIndex(0);
-      }, 700); // Wait for transition
+      }, 700);
     }
   }, [currentIndex]);
 
-  // Reset interval when currentIndex changes
   useEffect(() => {
     clearInterval(intervalRef.current);
     startAutoSlide();
@@ -83,7 +80,13 @@ const DestinationCard = () => {
 
   return (
     <div className="px-6 py-12 max-w-[1300px] mx-auto">
-      <div className="mb-8">
+      <motion.div
+        className="mb-8"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+      >
         <p className="text-orange-500 font-semibold text-sm">WHAT WE SERVE</p>
         <h2 className="text-3xl font-bold mt-2 mb-4 leading-tight">
           We Provide Top <br /> Destinations
@@ -94,28 +97,46 @@ const DestinationCard = () => {
             there live the blind texts.
           </p>
           <div className="flex items-center m-4 mt-0 h-10 justify-center space-x-4 text-gray-400 text-6xl">
-            <button onClick={handlePrev} className="hover:text-black transition">&#8592;</button>
-            <button
+            <motion.button
+              whileHover={{ x: -8 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+              onClick={handlePrev}
+              className="hover:text-black transition"
+            >
+              &#8592;
+            </motion.button>
+            <motion.button
+              whileHover={{ x: 8 }}
+              transition={{ type: 'spring', stiffness: 300 }}
               onClick={() => setCurrentIndex(prev => prev + 1)}
               className="hover:text-black transition"
             >
               &#8594;
-            </button>
+            </motion.button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Carousel */}
-      <div className="overflow-hidden">
+      <motion.div
+        className="overflow-hidden"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        viewport={{ once: true }}
+      >
         <div
           className="flex space-x-6"
           style={getTransformStyle()}
         >
           {extendedDestinations.map((item, index) => (
-            <div
+            <motion.div
               key={index}
               className="shrink-0"
               style={{ width: `${CARD_WIDTH}px` }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 * index }}
+              viewport={{ once: true }}
             >
               <div className="relative group">
                 <img
@@ -123,20 +144,23 @@ const DestinationCard = () => {
                   alt={item.title}
                   className="w-full h-[33rem] object-cover rounded-md"
                 />
-                
-                <div className="absolute bottom-0 left-0 w-full h-[25%] left-0 w-full bg-gradient-to-t from-black/90 via-black/70 to-transparent text-white px-5 py-20 rounded-b-md">
-  <h3 className="text-lg font-bold">{item.title}</h3>
-  <p className="text-sm">{item.location}</p>
-</div>
-
+                <div className="absolute bottom-0 left-0 w-full h-[25%] bg-gradient-to-t from-black/90 via-black/70 to-transparent text-white px-5 py-20 rounded-b-md">
+                  <h3 className="text-lg font-bold">{item.title}</h3>
+                  <p className="text-sm">{item.location}</p>
+                </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
 
-      {/* Dots */}
-      <div className="flex justify-center mt-6 space-x-2">
+      <motion.div
+        className="flex justify-center mt-6 space-x-2"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+        viewport={{ once: true }}
+      >
         {Array.from({ length: totalCards - VISIBLE_CARDS + 1 }).map((_, i) => (
           <button
             key={i}
@@ -144,7 +168,7 @@ const DestinationCard = () => {
             onClick={() => handleDotClick(i)}
           />
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 };
