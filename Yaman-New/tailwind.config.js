@@ -9,7 +9,11 @@ module.exports = withMT({
     "./node_modules/flowbite-react/**/*.js",
   ],
   theme: {
-    extend: {},
+    extend: {
+      transitionDuration: {
+        5000: '5000ms',
+      },
+    },
   },
   plugins: ['flowbite/plugin'],
 });
