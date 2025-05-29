@@ -6,10 +6,12 @@ import Footer from "../components/Footer.jsx";
 function HomePage() {
     return (
         <>
+            <div className="flex flex-col min-h-screen">
             <Navbar />
             <Carousel />
             <DesinationCard />
             <Footer />
+            </div>
         </>
     )
 
