@@ -1,53 +1,76 @@
+import logo from "../assets/logo.png";
+
 function Footer() {
   return (
-    <footer class="w-full bg-white p-8">
-  <div class="flex flex-row flex-wrap items-center justify-center gap-y-6 gap-x-12 bg-white text-center md:justify-between">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10">
-      <path d="M11.7 2.805a.75.75 0 0 1 .6 0A60.65 60.65 0 0 1 22.83 8.72a.75.75 0 0 1-.231 1.337 49.948 49.948 0 0 0-9.902 3.912l-.003.002c-.114.06-.227.119-.34.18a.75.75 0 0 1-.707 0A50.88 50.88 0 0 0 7.5 12.173v-.224c0-.131.067-.248.172-.311a54.615 54.615 0 0 1 4.653-2.52.75.75 0 0 0-.65-1.352 56.123 56.123 0 0 0-4.78 2.589 1.858 1.858 0 0 0-.859 1.228 49.803 49.803 0 0 0-4.634-1.527.75.75 0 0 1-.231-1.337A60.653 60.653 0 0 1 11.7 2.805Z" />
-      <path d="M13.06 15.473a48.45 48.45 0 0 1 7.666-3.282c.134 1.414.22 2.843.255 4.284a.75.75 0 0 1-.46.711 47.87 47.87 0 0 0-8.105 4.342.75.75 0 0 1-.832 0 47.87 47.87 0 0 0-8.104-4.342.75.75 0 0 1-.461-.71c.035-1.442.121-2.87.255-4.286.921.304 1.83.634 2.726.99v1.27a1.5 1.5 0 0 0-.14 2.508c-.09.38-.222.753-.397 1.11.452.213.901.434 1.346.66a6.727 6.727 0 0 0 .551-1.607 1.5 1.5 0 0 0 .14-2.67v-.645a48.549 48.549 0 0 1 3.44 1.667 2.25 2.25 0 0 0 2.12 0Z" />
-      <path d="M4.462 19.462c.42-.419.753-.89 1-1.395.453.214.902.435 1.347.662a6.742 6.742 0 0 1-1.286 1.794.75.75 0 0 1-1.06-1.06Z" />
-    </svg>
- 
-    <ul class="flex flex-wrap items-center gap-y-2 gap-x-8">
-      <li>
-        <a
-          href="#"
-          class="text-slate-700 hover:text-slate-500 focus:text-slate-500 text-sm"
-        >
-          About Us
-        </a>
-      </li>
-      <li>
-        <a
-          href="#"
-          class="text-slate-700 hover:text-slate-500 focus:text-slate-500 text-sm"
-        >
-          License
-        </a>
-      </li>
-      <li>
-        <a
-          href="#"
-          class="text-slate-700 hover:text-slate-500 focus:text-slate-500 text-sm"
-        >
-          Contribute
-        </a>
-      </li>
-      <li>
-        <a
-          href="#"
-          class="text-slate-700 hover:text-slate-500 focus:text-slate-500 text-sm"
-        >
-          Contact Us
-        </a>
-      </li>
-    </ul>
-  </div>
-  <p class="block mb-4 text-sm text-center text-slate-500 md:mb-0 border-t border-slate-200 mt-4 pt-4">
-    Copyright © 2024&nbsp; 
-    <a href="https://material-tailwind.com/" target="_blank" rel="noreferrer">Material Tailwind</a>.
-  </p>
-  </footer>
+    <div className="bg-gray-100">
+      <div className="px-4 pt-16 pb-10 mx-auto max-w-[1300px] md:px-8">
+        <div className="grid gap-16 row-gap-10 mb-8 lg:grid-cols-6">
+          {/* Left Section */}
+          <div className="md:max-w-md lg:col-span-2">
+            <a href="/" aria-label="Go home" title="Company" className="inline-flex items-center">
+              {/* Replace this SVG with <img src={logo} alt="logo" className="w-8" /> if you want your logo */}
+              <svg className="w-8 text-deep-purple-accent-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="1" width="7" height="12"></rect>
+                <rect x="3" y="17" width="7" height="6"></rect>
+                <rect x="14" y="1" width="7" height="6"></rect>
+                <rect x="14" y="11" width="7" height="12"></rect>
+              </svg>
+              <span className="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase">Company</span>
+            </a>
+            <div className="mt-4 lg:max-w-sm text-sm text-gray-800 space-y-4">
+              <p>
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+              </p>
+              <p>
+                Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+              </p>
+            </div>
+          </div>
+
+          {/* Right Grid Links */}
+          <div className="grid grid-cols-2 gap-5 row-gap-8 lg:col-span-4 md:grid-cols-4">
+            {[
+              ['Category', ['News', 'World', 'Games', 'References']],
+              ['Business', ['Web', 'eCommerce', 'Business', 'Entertainment', 'Portfolio']],
+              ['Apples', ['Media', 'Brochure', 'Nonprofit', 'Educational', 'Projects']],
+              ['Cherry', ['Infopreneur', 'Personal', 'Wiki', 'Forum']],
+            ].map(([title, links]) => (
+              <div key={title}>
+                <p className="font-semibold tracking-wide text-gray-800">{title}</p>
+                <ul className="mt-2 space-y-2">
+                  {links.map((text) => (
+                    <li key={text}>
+                      <a href="/" className="text-gray-600 transition-colors duration-300 hover:text-deep-purple-accent-400">
+                        {text}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom Section */}
+        <div className="flex flex-col justify-between border-t pt-5 sm:flex-row">
+          <p className="text-sm text-gray-600">© Copyright 2020 Lorem Inc. All rights reserved.</p>
+          <div className="flex items-center mt-4 space-x-4 sm:mt-0">
+            {/* Social Icons */}
+            {[
+              'M24,4.6c-0.9,...Z',
+              'M19.999,3h-10C6.14,...z',
+              'M22,0H2C0.895,...z',
+            ].map((d, i) => (
+              <a key={i} href="/" className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-400">
+                <svg viewBox="0 0 24 24" fill="currentColor" className="h-5">
+                  <path d={d}></path>
+                </svg>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
