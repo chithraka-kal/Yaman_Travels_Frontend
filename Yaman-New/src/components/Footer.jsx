@@ -10,23 +10,22 @@ function Footer() {
               <img src={logo} alt="Logo" className="h-24 w-24 bg-gray-300 rounded-full border-gray-500" />
             <div className="mt-4 lg:max-w-sm">
               <p className="text-sm text-gray-800">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium, totam rem aperiam.
+                Yaman Travels brings you the best of Sri Lanka — from serene beaches and misty mountains to thrilling safaris and cultural wonders.
               </p>
               <p className="mt-4 text-sm text-gray-800">
-                Eaque ipsa quae ab illo inventore veritatis et quasi architecto
-                beatae vitae dicta sunt explicabo.
+                Explore unique travel packages and trusted transport services, handpicked for unforgettable journeys.
               </p>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-5 row-gap-8 lg:col-span-4 pt-8 md:grid-cols-4">
             {/* Category Links */}
             {[
-              ["Category", ["News", "World", "Games", "References"]],
-              ["Business", ["Web", "eCommerce", "Business", "Entertainment", "Portfolio"]],
-              ["Apples", ["Media", "Brochure", "Nonprofit", "Educational", "Projects"]],
-              ["Cherry", ["Infopreneur", "Personal", "Wiki", "Forum"]],
-            ].map(([title, items], i) => (
+                ["Packages", ["Diving", "Hot Air Balloon", "Surfing", "Camping", "Safari"]],
+                ["Destinations", ["Ella", "Nuwara Eliya", "Sigiriya", "Galle", "Jaffna"]],
+  
+                ["Services", ["Travel Buses", "Tuk Tuk Rental", "Bicycle Rental", "Tour Guides"]],
+                ["Quick Links", ["Home", "Packages", "Destinations", "Contact Us"]],
+                ].map(([title, items], i) => (
               <div key={i}>
                 <p className="font-semibold tracking-wide text-gray-800">{title}</p>
                 <ul className="mt-2 space-y-2">
@@ -50,8 +49,9 @@ function Footer() {
         <div className="border-t border-gray-400">
           <div className="flex flex-col justify-between pt-5 pb-10 mx-auto max-w-[1300px] sm:flex-row">
             <p className="text-sm text-gray-600">
-              © Copyright 2020 Lorem Inc. All rights reserved.
-            </p>
+  © {new Date().getFullYear()} Yaman Travels. All rights reserved.
+</p>
+
             <div className="flex items-center mt-4 space-x-4 sm:mt-0">
               {/* Twitter */}
               <a href="/" class="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-400 hover:text-[#1DA1F2]">
