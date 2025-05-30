@@ -20,7 +20,7 @@ function Navbar() {
 
             {/* Navigation - desktop only */}
             <div className="hidden md:flex md:items-center md:space-x-6">
-              <a href="#" className="text-black">Home</a>
+              <a href="/" className="text-black">Home</a>
               <a href="#" className="text-gray-500 hover:text-black">Destinations</a>
               <a href="#" className="text-gray-500 hover:text-black">Packages</a>
               <a href="#" className="text-gray-500 hover:text-black">Services</a>
