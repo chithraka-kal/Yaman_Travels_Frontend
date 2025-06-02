@@ -1,7 +1,8 @@
+// src/components/navbar.jsx
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import user from "../assets/user.jpg";
-
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -14,18 +15,18 @@ function Navbar() {
           {/* Left: Logo + Navigation (desktop) */}
           <div className="flex items-center space-x-6">
             {/* Logo */}
-            <a href="#" className="flex items-center">
+            <Link to="/" className="flex items-center">
               <img src={logo} alt="Logo" className="h-32 w-32" />
-            </a>
+            </Link>
 
             {/* Navigation - desktop only */}
             <div className="hidden md:flex md:items-center md:space-x-6">
-              <a href="/" className="text-black">Home</a>
-              <a href="#" className="text-gray-500 hover:text-black">Destinations</a>
-              <a href="#" className="text-gray-500 hover:text-black">Packages</a>
-              <a href="#" className="text-gray-500 hover:text-black">Services</a>
-              <a href="#" className="text-gray-500 hover:text-black">About Us</a>
-              <a href="#" className="text-gray-500 hover:text-black">Contact Us</a>
+              <Link to="/" className="text-black">Home</Link>
+              <Link to="/destinations" className="text-gray-500 hover:text-black">Destinations</Link>
+              <Link to="/packages" className="text-gray-500 hover:text-black">Packages</Link>
+              <Link to="/services" className="text-gray-500 hover:text-black">Services</Link>
+              <Link to="/about" className="text-gray-500 hover:text-black">About Us</Link>
+              <Link to="/contact" className="text-gray-500 hover:text-black">Contact Us</Link>
             </div>
           </div>
 
@@ -52,13 +53,14 @@ function Navbar() {
 
         {/* Mobile navigation menu */}
         {menuOpen && (
-          <div className="mt-4 flex flex-col space-y-2 md:hidden">
-            <a href="#" className="text-blue-700">Home</a>
-            <a href="#" className="text-gray-800 hover:text-blue-700">About</a>
-            <a href="#" className="text-gray-800 hover:text-blue-700">Services</a>
-            <a href="#" className="text-gray-800 hover:text-blue-700">Pricing</a>
-            <a href="#" className="text-gray-800 hover:text-blue-700">Contact</a>
-            <img src={user} alt="User" className="md:block w-8 h-8 rounded-full"/>
+          <div className="mt-4 flex flex-col space-y-2 md:hidden px-4">
+            <Link to="/" className="text-blue-700">Home</Link>
+            <Link to="/about" className="text-gray-800 hover:text-blue-700">About</Link>
+            <Link to="/services" className="text-gray-800 hover:text-blue-700">Services</Link>
+            <Link to="/packages" className="text-gray-800 hover:text-blue-700">Packages</Link>
+            <Link to="/destinations" className="text-gray-800 hover:text-blue-700">Destinations</Link>
+            <Link to="/contact" className="text-gray-800 hover:text-blue-700">Contact</Link>
+            <img src={user} alt="User" className="w-8 h-8 rounded-full"/>
           </div>
         )}
       </div>
