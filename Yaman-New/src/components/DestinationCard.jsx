@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import img1 from '../assets/seegiriya.jpg';
+import data from '../../data';
 
 const destinations = [
   { image: img1, title: 'Enjoy the beauty of Maldives', location: 'Maldives, Republic Maldives' },
