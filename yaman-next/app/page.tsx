@@ -1,18 +1,22 @@
-import Carousel from "../components/CarouselWithContent.jsx";
-import DesinationCard from "../components/DestinationCard.jsx";
-import Footer from "../components/Footer.jsx";
+import Carousel from "../components/CarouselWithContent";
+import SearchWidget from "../components/SearchWidget";
+import ValueProps from "../components/ValueProps";
+import CategorySection from "../components/CategorySection";
+import Testimonials from "../components/Testimonials";
+import DesinationCard from "../components/DestinationCard";
+import Newsletter from "../components/Newsletter";
 
-function HomePage() {
+export default function HomePage() {
     return (
-        <>
-            <div className="flex flex-col min-h-screen">            
+        <div className="flex flex-col min-h-screen">            
             <Carousel />
+            <SearchWidget />
+            <CategorySection />
             <DesinationCard />
-            <Footer />
-            </div>
-        </>
-    )
-
+            <ValueProps />
+                        
+            <Testimonials />
+            <Newsletter />
+        </div>
+    );
 }
-
-export default HomePage;

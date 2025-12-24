@@ -1,7 +1,10 @@
+"use client"; 
+
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import img1 from '../assets/seegiriya.jpg';
-import data from '../../data';
+
+// Removed image import, using string path
+const img1 = "/seegiriya.jpg";
 
 const destinations = [
   { image: img1, title: 'Enjoy the beauty of Maldives', location: 'Maldives, Republic Maldives' },
@@ -80,7 +83,7 @@ const DestinationCard = () => {
   };
 
   return (
-    <div className="px-6 py-12 max-w-[1300px] mx-auto">
+    <div className="px-6 py-12 max-w-[1300px] mx-auto overflow-hidden">
       <motion.div
         className="mb-8"
         initial={{ opacity: 0, y: 40 }}
@@ -92,10 +95,10 @@ const DestinationCard = () => {
         <h2 className="text-3xl font-bold mt-2 mb-4 leading-tight">
           We Provide Top <br /> Destinations
         </h2>
-        <div className="flex justify-between items-start">
+        {/* ... controls ... */}
+         <div className="flex justify-between items-start">
           <p className="text-gray-600 max-w-lg">
-            Far far away, behind the word mountains, far from the countries Vokalia and Consonantia,
-            there live the blind texts.
+            Far far away, behind the word mountains, far from the countries Vokalia and Consonantia...
           </p>
           <div className="flex items-center m-4 mt-0 h-10 justify-center space-x-4 text-gray-400 text-6xl">
             <motion.button
@@ -141,7 +144,7 @@ const DestinationCard = () => {
             >
               <div className="relative group">
                 <img
-                  src={item.image}
+                  src={item.image} // using string path directly
                   alt={item.title}
                   className="w-full h-[33rem] object-cover rounded-md"
                 />
