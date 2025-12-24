@@ -1,3 +1,7 @@
+"use client";
+
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import PageHeader from "../../components/PageHeader";
 import { CheckCircle, Clock, Users } from "lucide-react";
 
@@ -6,7 +10,7 @@ const packages = [
   {
     id: 1,
     title: "Air Balloon - Dambulla",
-    image: "/baloon.jpg", // Ensure you have this image in public/
+    image: "/baloon.jpg", 
     description: "Soar above the stunning landscapes of Dambulla on a thrilling hot air balloon ride. Experience breathtaking views of ancient temples and lush greenery.",
     price: "$180",
     duration: "3 Hours",
@@ -60,6 +64,46 @@ const packages = [
 ];
 
 export default function Packages() {
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  const handleBook = async (pkg) => {
+    // 1. Check Login
+    if (!session) {
+      alert("Please login to book a trip!");
+      router.push("/login");
+      return;
+    }
+
+    // 2. Confirm Action
+    const confirm = window.confirm(`Do you want to book ${pkg.title} for ${pkg.price}?`);
+    if (!confirm) return;
+
+    // 3. Send to API
+    try {
+      const res = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userEmail: session.user.email,
+          packageTitle: pkg.title,
+          price: pkg.price,
+          date: new Date().toLocaleDateString(), 
+        }),
+      });
+
+      if (res.ok) {
+        alert("Booking Successful! Check your profile.");
+        router.push("/profile");
+      } else {
+        alert("Booking failed.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong.");
+    }
+  };
+
   return (
     <div className="bg-gray-50 min-h-screen pb-20">
       <PageHeader 
@@ -110,7 +154,11 @@ export default function Packages() {
                 </div>
               </div>
 
-              <button className="self-start bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105">
+              {/* FIXED BUTTON HERE: Added onClick */}
+              <button 
+                onClick={() => handleBook(pkg)}
+                className="self-start bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105"
+              >
                 Book This Package
               </button>
             </div>
