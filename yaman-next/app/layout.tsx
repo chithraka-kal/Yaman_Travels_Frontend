@@ -1,4 +1,5 @@
 import "./globals.css";
+
 // Note: If 'components' is at the root, '../components' is correct.
 import Navbar from "../components/Navbar"; 
 import Footer from "../components/Footer";

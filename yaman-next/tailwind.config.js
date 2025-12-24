@@ -3,9 +3,10 @@ const withMT = require("@material-tailwind/react/utils/withMT");
 
 module.exports = withMT({
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",        
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",      
-    "./components/**/*.{js,ts,jsx,tsx,mdx}", 
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",      // Covers anything in src/
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",      // Covers app/ (if at root)
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",    // Covers pages/ (if at root)
+    "./components/**/*.{js,ts,jsx,tsx,mdx}", // Covers components/ (if at root)
     "./node_modules/flowbite-react/**/*.js",
   ],
   theme: {
