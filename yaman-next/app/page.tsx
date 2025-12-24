@@ -4,6 +4,7 @@ import ValueProps from "../components/ValueProps";
 import CategorySection from "../components/CategorySection";
 import Testimonials from "../components/Testimonials";
 import DesinationCard from "../components/DestinationCard";
+import PromoBanner from "../components/PromoBanner";
 import Newsletter from "../components/Newsletter";
 
 export default function HomePage() {
@@ -14,7 +15,7 @@ export default function HomePage() {
             <CategorySection />
             <DesinationCard />
             <ValueProps />
-                        
+            <PromoBanner />
             <Testimonials />
             <Newsletter />
         </div>
