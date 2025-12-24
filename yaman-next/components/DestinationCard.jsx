@@ -1,180 +1,146 @@
-"use client"; 
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from "react";
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight, MapPin } from "lucide-react"; // I added lucide-react icons for a cleaner look
 
-// Removed image import, using string path
-const img1 = "/seegiriya.jpg";
+// If you don't have lucide-react installed, run: npm install lucide-react
+// Or you can replace these with your existing SVG icons.
 
 const destinations = [
-  { image: img1, title: 'Enjoy the beauty of Maldives', location: 'Maldives, Republic Maldives' },
-  { image: img1, title: 'Enjoy the beauty of Maldives', location: 'Maldives, Republic Maldives' },
-  { image: img1, title: 'Enjoy the beauty of Maldives', location: 'Maldives, Republic Maldives' },
-  { image: img1, title: 'Enjoy the beauty of Maldives', location: 'Maldives, Republic Maldives' },
-  { image: img1, title: 'Enjoy the beauty of Maldives', location: 'Maldives, Republic Maldives' },
-  { image: img1, title: 'Enjoy the beauty of Maldives', location: 'Maldives, Republic Maldives' },
+  {
+    id: 1,
+    image: "/seegiriya.jpg",
+    title: "Ancient Sigiriya",
+    location: "Dambulla, Sri Lanka",
+    price: "$150",
+  },
+  {
+    id: 2,
+    image: "/carousel/elephant1.jpg",
+    title: "Yala Safari",
+    location: "Yala National Park",
+    price: "$200",
+  },
+  {
+    id: 3,
+    image: "/carousel/ritipanna2.jpg",
+    title: "Coastal Fishing",
+    location: "Galle, Sri Lanka",
+    price: "$80",
+  },
+  {
+    id: 4,
+    image: "/carousel/train.jpg",
+    title: "Ella Train Ride",
+    location: "Ella, Sri Lanka",
+    price: "$50",
+  },
+  {
+    id: 5,
+    image: "/beach1.jpg", // Ensure this image is in /public or change path
+    title: "Mirissa Beach",
+    location: "Mirissa, Sri Lanka",
+    price: "$120",
+  },
 ];
 
-const CARD_WIDTH = 400;
-const GAP = 24;
-const VISIBLE_CARDS = 3;
+export default function DestinationCard() {
+  const scrollRef = useRef(null);
 
-const DestinationCard = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(true);
-  const intervalRef = useRef(null);
-
-  const totalCards = destinations.length;
-  const extendedDestinations = [...destinations, ...destinations.slice(0, VISIBLE_CARDS)];
-  const maxIndex = totalCards;
-
-  const startAutoSlide = () => {
-    intervalRef.current = setInterval(() => {
-      setCurrentIndex(prev => prev + 1);
-      setIsTransitioning(true);
-    }, 5000);
-  };
-
-  useEffect(() => {
-    startAutoSlide();
-    return () => clearInterval(intervalRef.current);
-  }, []);
-
-  useEffect(() => {
-    if (currentIndex === maxIndex) {
-      setTimeout(() => {
-        setIsTransitioning(false);
-        setCurrentIndex(0);
-      }, 700);
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      const { current } = scrollRef;
+      const scrollAmount = 350; // Width of one card
+      if (direction === "left") {
+        current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+      } else {
+        current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+      }
     }
-  }, [currentIndex]);
-
-  useEffect(() => {
-    clearInterval(intervalRef.current);
-    startAutoSlide();
-    return () => clearInterval(intervalRef.current);
-  }, [currentIndex]);
-
-  const getTransformStyle = () => {
-    return {
-      transform: `translateX(-${(CARD_WIDTH + GAP) * currentIndex}px)`,
-      transition: isTransitioning ? 'transform 700ms ease-in-out' : 'none',
-      width: `${(CARD_WIDTH + GAP) * extendedDestinations.length}px`,
-    };
-  };
-
-  const handlePrev = () => {
-    if (currentIndex === 0) {
-      setIsTransitioning(false);
-      setCurrentIndex(totalCards);
-      setTimeout(() => {
-        setIsTransitioning(true);
-        setCurrentIndex(totalCards - 1);
-      }, 20);
-    } else {
-      setIsTransitioning(true);
-      setCurrentIndex(prev => prev - 1);
-    }
-  };
-
-  const handleDotClick = (i) => {
-    setIsTransitioning(true);
-    setCurrentIndex(i);
   };
 
   return (
-    <div className="px-6 py-12 max-w-[1300px] mx-auto overflow-hidden">
-      <motion.div
-        className="mb-8"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        viewport={{ once: true }}
-      >
-        <p className="text-orange-500 font-semibold text-sm">WHAT WE SERVE</p>
-        <h2 className="text-3xl font-bold mt-2 mb-4 leading-tight">
-          We Provide Top <br /> Destinations
-        </h2>
-        {/* ... controls ... */}
-         <div className="flex justify-between items-start">
-          <p className="text-gray-600 max-w-lg">
-            Far far away, behind the word mountains, far from the countries Vokalia and Consonantia...
-          </p>
-          <div className="flex items-center m-4 mt-0 h-10 justify-center space-x-4 text-gray-400 text-6xl">
-            <motion.button
-              whileHover={{ x: -8 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-              onClick={handlePrev}
-              className="hover:text-black transition"
+    <div className="py-16 bg-white relative">
+      <div className="mx-auto max-w-[1300px] px-6">
+        
+        {/* Header Section */}
+        <div className="flex justify-between items-end mb-8">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <p className="text-orange-500 font-semibold tracking-wide uppercase text-sm">
+              Top Destinations
+            </p>
+            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mt-2">
+              Explore Top <br /> Attractions
+            </h2>
+          </motion.div>
+
+          {/* Navigation Buttons */}
+          <div className="flex gap-4 hidden sm:flex">
+            <button
+              onClick={() => scroll("left")}
+              className="w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center hover:bg-orange-500 hover:text-white hover:border-orange-500 transition-all duration-300 group"
             >
-              &#8592;
-            </motion.button>
-            <motion.button
-              whileHover={{ x: 8 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-              onClick={() => setCurrentIndex(prev => prev + 1)}
-              className="hover:text-black transition"
+              <ChevronLeft className="w-6 h-6 text-gray-600 group-hover:text-white" />
+            </button>
+            <button
+              onClick={() => scroll("right")}
+              className="w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center hover:bg-orange-500 hover:text-white hover:border-orange-500 transition-all duration-300 group"
             >
-              &#8594;
-            </motion.button>
+              <ChevronRight className="w-6 h-6 text-gray-600 group-hover:text-white" />
+            </button>
           </div>
         </div>
-      </motion.div>
 
-      <motion.div
-        className="overflow-hidden"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        viewport={{ once: true }}
-      >
+        {/* Scrollable Container (Hide Scrollbar) */}
         <div
-          className="flex space-x-6"
-          style={getTransformStyle()}
+          ref={scrollRef}
+          className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          {extendedDestinations.map((item, index) => (
+          {destinations.map((item, index) => (
             <motion.div
-              key={index}
-              className="shrink-0"
-              style={{ width: `${CARD_WIDTH}px` }}
-              initial={{ opacity: 0, y: 40 }}
+              key={item.id}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 * index }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
+              className="min-w-[300px] md:min-w-[350px] snap-center group relative cursor-pointer"
             >
-              <div className="relative group">
+              {/* Image Card */}
+              <div className="h-[450px] rounded-2xl overflow-hidden shadow-lg relative">
                 <img
-                  src={item.image} // using string path directly
+                  src={item.image}
                   alt={item.title}
-                  className="w-full h-[33rem] object-cover rounded-md"
+                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className="absolute bottom-0 left-0 w-full h-[25%] bg-gradient-to-t from-black/90 via-black/70 to-transparent text-white px-5 py-20 rounded-b-md">
-                  <h3 className="text-lg font-bold">{item.title}</h3>
-                  <p className="text-sm">{item.location}</p>
+                
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90" />
+
+                {/* Content Overlay */}
+                <div className="absolute bottom-0 left-0 w-full p-6 text-white translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                  <div className="flex items-center gap-1 text-orange-300 text-sm font-medium mb-1">
+                    <MapPin className="w-4 h-4" />
+                    {item.location}
+                  </div>
+                  <h3 className="text-2xl font-bold mb-2">{item.title}</h3>
+                  <div className="flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 border-t border-white/20 pt-4 mt-2">
+                    <span className="text-lg font-semibold">{item.price} <span className="text-xs font-normal">/ person</span></span>
+                    <span className="bg-orange-500 text-white text-xs px-3 py-1 rounded-full">Book Now</span>
+                  </div>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
-      </motion.div>
 
-      <motion.div
-        className="flex justify-center mt-6 space-x-2"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        viewport={{ once: true }}
-      >
-        {Array.from({ length: totalCards - VISIBLE_CARDS + 1 }).map((_, i) => (
-          <button
-            key={i}
-            className={`w-2 h-2 rounded-full ${i === currentIndex % totalCards ? 'bg-orange-500' : 'bg-orange-200'}`}
-            onClick={() => handleDotClick(i)}
-          />
-        ))}
-      </motion.div>
+      </div>
     </div>
   );
-};
-
-export default DestinationCard;
+}
