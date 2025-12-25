@@ -25,7 +25,7 @@ const slides = [
   },
   {
     id: 3,
-    image: "/carousel/sigiriya.jpg", 
+    image: "/carousel/seegiriya.jpg", 
     title: "Ancient Wonders",
     subtitle: "Climb the fortress in the sky.",
     cta: "Discover History",
