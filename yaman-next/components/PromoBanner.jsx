@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from 'next/link';
 
 export default function PromoBanner() {
   return (
@@ -35,9 +36,11 @@ export default function PromoBanner() {
           <p className="text-gray-200 text-lg mb-8 max-w-2xl mx-auto">
             Book your "Cultural Triangle" package this month and get a free guided village tour. Experience the authentic island life.
           </p>
+          <Link href={`/packages`}>
           <button className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-10 rounded-full transition-all transform hover:scale-105 shadow-xl">
             View Packages
           </button>
+          </Link>
         </motion.div>
       </div>
     </section>
