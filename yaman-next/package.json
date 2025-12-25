@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@material-tailwind/react": "^2.1.10",
     "bcryptjs": "^3.0.3",
     "flowbite": "^4.0.1",
