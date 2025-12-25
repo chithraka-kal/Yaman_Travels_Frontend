@@ -18,7 +18,7 @@ export default function Navbar() {
     const startTimer = setTimeout(() => setShowAiTooltip(true), 1000);
     
     // Auto-hide after 6 seconds total
-    const hideTimer = setTimeout(() => setShowAiTooltip(false), 7000);
+    const hideTimer = setTimeout(() => setShowAiTooltip(false), 3000);
 
     return () => {
       clearTimeout(startTimer);
