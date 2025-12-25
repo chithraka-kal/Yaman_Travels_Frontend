@@ -1,17 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { Menu, X, LogOut, User, UserPlus } from "lucide-react";
+import { Menu, X, LogOut, User, UserPlus, Sparkles } from "lucide-react";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { data: session } = useSession();
+  
+  // New State for the Tooltip
+  const [showAiTooltip, setShowAiTooltip] = useState(false);
+
+  // Logic: Show tooltip on load, hide after 5 seconds
+  useEffect(() => {
+    // Small delay to make it feel natural after page load
+    const startTimer = setTimeout(() => setShowAiTooltip(true), 1000);
+    
+    // Auto-hide after 6 seconds total
+    const hideTimer = setTimeout(() => setShowAiTooltip(false), 7000);
+
+    return () => {
+      clearTimeout(startTimer);
+      clearTimeout(hideTimer);
+    };
+  }, []);
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "AI Planner", href: "/planner" },
+    { name: "AI Planner", href: "/planner", isSpecial: true }, // Mark this link
     { name: "Packages", href: "/packages" },
     { name: "Destinations", href: "/destinations" },
     { name: "Services", href: "/services" },
@@ -36,15 +53,41 @@ export default function Navbar() {
           </Link>
 
           {/* --- 2. DESKTOP NAVIGATION --- */}
-          <div className="hidden lg:flex space-x-8">
+          <div className="hidden lg:flex space-x-8 items-center">
             {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="text-gray-600 hover:text-orange-500 font-medium text-[15px] transition-colors uppercase tracking-wide"
-              >
-                {link.name}
-              </Link>
+              <div key={link.name} className="relative group">
+                <Link
+                  href={link.href}
+                  className={`font-medium text-[15px] transition-colors uppercase tracking-wide flex items-center gap-1
+                    ${link.isSpecial 
+                      ? "text-purple-600 hover:text-purple-700 font-bold" 
+                      : "text-gray-600 hover:text-orange-500"
+                    }`}
+                >
+                  {link.isSpecial && <Sparkles className="w-4 h-4" />}
+                  {link.name}
+                </Link>
+
+                {/* --- THE POPUP TOOLTIP --- */}
+                {link.isSpecial && showAiTooltip && (
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-48 z-50 animate-bounce-short">
+                    {/* The Triangle Pointer */}
+                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-purple-600"></div>
+                    
+                    {/* The Content Box */}
+                    <div className="p-3 text-xs rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-purple-200">
+                      <button 
+                        onClick={(e) => { e.preventDefault(); setShowAiTooltip(false); }}
+                        className="absolute top-1 right-1 text-white/50 hover:text-white"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                      Try our New Feature! <br/>
+                      <span className="font-normal opacity-90"> AI Trip Planner✨</span>
+                    </div>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
 
@@ -52,35 +95,30 @@ export default function Navbar() {
           <div className="hidden lg:flex items-center gap-3">
             {session ? (
               // Logged In State
-              // ... inside the {session ? (...)} block
-
-<div className="flex items-center gap-3 bg-gray-50 px-1 py-1 pr-4 rounded-full border border-gray-100">
-  {/* Make the user info clickable to go to Profile */}
-  <Link href="/profile" className="flex items-center gap-3 hover:bg-gray-200 rounded-full px-3 py-1 transition-colors">
-    <div className="text-right">
-      <p className="text-xs font-bold text-gray-900 leading-none mb-1">
-        {session.user.name}
-      </p>
-      <p className="text-[10px] text-gray-500 leading-none">
-        {session.user.email}
-      </p>
-    </div>
-    <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold border border-orange-200">
-      {session.user.name.charAt(0)}
-    </div>
-  </Link>
-
-  {/* Sign Out Button stays separate */}
-  <button 
-    onClick={() => signOut({ callbackUrl: '/' })}
-    className="ml-2 p-1.5 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all"
-    title="Sign Out"
-  >
-    <LogOut className="w-4 h-4" />
-  </button>
-</div>
+              <div className="flex items-center gap-3 bg-gray-50 px-1 py-1 pr-4 rounded-full border border-gray-100">
+                <Link href="/profile" className="flex items-center gap-3 hover:bg-gray-200 rounded-full px-3 py-1 transition-colors">
+                  <div className="text-right">
+                    <p className="text-xs font-bold text-gray-900 leading-none mb-1">
+                      {session.user.name}
+                    </p>
+                    <p className="text-[10px] text-gray-500 leading-none">
+                      {session.user.email}
+                    </p>
+                  </div>
+                  <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold border border-orange-200">
+                    {session.user.name.charAt(0)}
+                  </div>
+                </Link>
+                <button 
+                  onClick={() => signOut({ callbackUrl: '/' })}
+                  className="ml-2 p-1.5 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all"
+                  title="Sign Out"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
             ) : (
-              // Logged Out State - Two Buttons
+              // Logged Out State
               <>
                 <Link 
                   href="/login"
@@ -120,10 +158,16 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
-                className="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-orange-500 hover:bg-orange-50"
+                className={`block px-3 py-3 rounded-md text-base font-medium transition-colors
+                   ${link.isSpecial ? "text-purple-600 bg-purple-50" : "text-gray-700 hover:text-orange-500 hover:bg-orange-50"}
+                `}
                 onClick={() => setMenuOpen(false)}
               >
-                {link.name}
+                <div className="flex items-center gap-2">
+                   {link.isSpecial && <Sparkles className="w-4 h-4" />}
+                   {link.name}
+                   {link.isSpecial && <span className="text-[10px] bg-purple-600 text-white px-2 py-0.5 rounded-full ml-auto">NEW</span>}
+                </div>
               </Link>
             ))}
             
@@ -136,22 +180,9 @@ export default function Navbar() {
                    <LogOut className="w-5 h-5" /> Sign Out ({session.user.name})
                  </button>
               ) : (
-                // Mobile Buttons
                 <div className="flex flex-col gap-3">
-                    <Link 
-                      href="/login"
-                      className="block w-full text-center px-3 py-3 border-2 border-green-500 text-green-600 rounded-md font-bold hover:bg-green-50"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      Login
-                    </Link>
-                    <Link 
-                      href="/register"
-                      className="block w-full text-center px-3 py-3 bg-orange-500 text-white rounded-md font-bold hover:bg-orange-600"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      Register
-                    </Link>
+                    <Link href="/login" className="block w-full text-center px-3 py-3 border-2 border-green-500 text-green-600 rounded-md font-bold hover:bg-green-50">Login</Link>
+                    <Link href="/register" className="block w-full text-center px-3 py-3 bg-orange-500 text-white rounded-md font-bold hover:bg-orange-600">Register</Link>
                 </div>
               )}
             </div>

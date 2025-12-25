@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import PageHeader from "../../components/PageHeader";
-import { Sparkles, Loader2, ChevronLeft, ChevronRight, Star, X, MapPin } from "lucide-react";
+import { Sparkles, Loader2, ChevronLeft, ChevronRight, Star, X, MapPin, Calendar, Wallet, Navigation, Heart } from "lucide-react";
 import dynamic from "next/dynamic";
 
 // Dynamic import for the Map component
@@ -56,53 +56,126 @@ function PlannerForm() {
     }
   };
 
-  // Helper to determine time of day for the label
-  const getTimeOfDay = (timeStr) => {
-    const hour = parseInt(timeStr.split(':')[0]);
-    if (hour < 12) return "Morning";
-    if (hour < 17) return "Afternoon";
-    return "Evening";
-  };
-
   return (
     <div className="bg-gray-50 min-h-screen font-sans text-gray-900">
       
       {/* 1. INPUT FORM (Shows when no plan exists) */}
       {!plan && (
          <div className="min-h-screen flex flex-col bg-white">
+            {/* Header Image */}
             <PageHeader title="AI Planner" subtitle="Design your perfect trip in seconds." image="/carousel/train.jpg" />
-            <div className="flex-1 max-w-5xl mx-auto px-4 -mt-24 relative z-10 pb-20 w-full">
-                <div className="bg-white p-8 md:p-12 rounded-3xl shadow-2xl border border-gray-100">
-                   <h1 className="text-3xl font-extrabold text-gray-900 mb-8 text-center">Where is your next adventure?</h1>
-                   <form onSubmit={handleGenerate} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="col-span-1">
-                          <label className="block text-sm font-bold text-gray-700 mb-2">Starting Point</label>
-                          <input type="text" required className="w-full p-4 bg-gray-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-500 focus:border-transparent font-semibold transition-all" value={from} onChange={(e) => setFrom(e.target.value)}/>
+            
+            {/* Form Container - Floating over header */}
+            <div className="flex-1 w-full max-w-4xl mx-auto px-4 -mt-32 relative z-10 pb-20">
+                <div className="bg-white/90 backdrop-blur-sm p-8 md:p-10 rounded-[2.5rem] shadow-2xl border border-white/50">
+                   
+                   <div className="text-center mb-10">
+                      <span className="inline-block py-1 px-3 rounded-full bg-orange-100 text-orange-600 text-xs font-bold uppercase tracking-wider mb-3">
+                        AI-Powered Travel Agent
+                      </span>
+                      <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight">
+                        Where will you go next?
+                      </h1>
+                   </div>
+
+                   <form onSubmit={handleGenerate} className="space-y-6">
+                      
+                      {/* Row 1: Route */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="relative group">
+                              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">Starting From</label>
+                              <div className="relative">
+                                <Navigation className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-orange-500 transition-colors" />
+                                <input 
+                                  type="text" 
+                                  required 
+                                  className="w-full pl-12 pr-4 py-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:bg-white focus:border-orange-500 focus:ring-0 font-bold text-gray-800 transition-all outline-none" 
+                                  placeholder="e.g. Colombo"
+                                  value={from} 
+                                  onChange={(e) => setFrom(e.target.value)}
+                                />
+                              </div>
+                          </div>
+
+                          <div className="relative group">
+                              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">Destination</label>
+                              <div className="relative">
+                                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-orange-500 transition-colors" />
+                                <input 
+                                  type="text" 
+                                  required 
+                                  className="w-full pl-12 pr-4 py-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:bg-white focus:border-orange-500 focus:ring-0 font-bold text-gray-800 transition-all outline-none" 
+                                  placeholder="e.g. Ella"
+                                  value={destination} 
+                                  onChange={(e) => setDestination(e.target.value)}
+                                />
+                              </div>
+                          </div>
                       </div>
-                      <div className="col-span-1">
-                          <label className="block text-sm font-bold text-gray-700 mb-2">Destination</label>
-                          <input type="text" required className="w-full p-4 bg-gray-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-500 focus:border-transparent font-semibold transition-all" value={destination} onChange={(e) => setDestination(e.target.value)}/>
+
+                      {/* Row 2: Details */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="relative group">
+                             <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">Duration</label>
+                             <div className="relative">
+                                <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-orange-500 transition-colors" />
+                                <input 
+                                  type="number" 
+                                  min="1" max="14"
+                                  className="w-full pl-12 pr-4 py-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:bg-white focus:border-orange-500 focus:ring-0 font-bold text-gray-800 transition-all outline-none" 
+                                  value={days} 
+                                  onChange={(e) => setDays(e.target.value)}
+                                />
+                                <span className="absolute right-6 top-1/2 -translate-y-1/2 text-sm font-bold text-gray-400 pointer-events-none">Days</span>
+                             </div>
+                          </div>
+
+                          <div className="relative group">
+                             <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">Budget</label>
+                             <div className="relative">
+                                <Wallet className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-orange-500 transition-colors" />
+                                <select 
+                                  className="w-full pl-12 pr-4 py-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:bg-white focus:border-orange-500 focus:ring-0 font-bold text-gray-800 transition-all outline-none appearance-none cursor-pointer" 
+                                  value={budget} 
+                                  onChange={(e) => setBudget(e.target.value)}
+                                >
+                                   <option>Low (Backpacker)</option>
+                                   <option>Medium (Standard)</option>
+                                   <option>High (Luxury)</option>
+                                </select>
+                             </div>
+                          </div>
                       </div>
-                      <div>
-                        <label className="block text-sm font-bold text-gray-700 mb-2">Duration (Days)</label>
-                        <input type="number" className="w-full p-4 bg-gray-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-500 focus:border-transparent font-semibold transition-all" value={days} onChange={(e) => setDays(e.target.value)}/>
+
+                      {/* Row 3: Interests */}
+                      <div className="relative group">
+                          <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1">Specific Interests (Optional)</label>
+                          <div className="relative">
+                            <Heart className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-orange-500 transition-colors" />
+                            <input 
+                              type="text" 
+                              placeholder="e.g. Hiking, History, Local Food, Relaxing" 
+                              className="w-full pl-12 pr-4 py-4 bg-gray-50 rounded-2xl border-2 border-transparent focus:bg-white focus:border-orange-500 focus:ring-0 font-bold text-gray-800 transition-all outline-none" 
+                              value={interests} 
+                              onChange={(e) => setInterests(e.target.value)}
+                            />
+                          </div>
                       </div>
-                      <div>
-                        <label className="block text-sm font-bold text-gray-700 mb-2">Budget</label>
-                        <select className="w-full p-4 bg-gray-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-500 focus:border-transparent font-semibold transition-all" value={budget} onChange={(e) => setBudget(e.target.value)}>
-                            <option>Medium</option><option>Low</option><option>High</option>
-                        </select>
-                      </div>
-                      <div className="col-span-2">
-                         <label className="block text-sm font-bold text-gray-700 mb-2">Interests</label>
-                         <input type="text" placeholder="e.g. Hiking, Beaches, History" className="w-full p-4 bg-gray-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-orange-500 focus:border-transparent font-semibold transition-all" value={interests} onChange={(e) => setInterests(e.target.value)}/>
-                      </div>
-                      <div className="col-span-2 mt-4">
-                        <button disabled={loading} className="w-full bg-black text-white font-bold py-4 rounded-xl hover:bg-gray-800 transition-all flex justify-center items-center gap-2 shadow-lg">
-                            {loading ? <Loader2 className="animate-spin" /> : <Sparkles className="w-5 h-5" />} 
-                            {loading ? "Generating Plan..." : "Plan My Trip"}
+
+                      {/* Submit Button */}
+                      <div className="pt-4">
+                        <button 
+                          disabled={loading} 
+                          className="w-full bg-gradient-to-r from-gray-900 to-black hover:from-orange-500 hover:to-orange-600 text-white font-bold py-5 rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex justify-center items-center gap-3"
+                        >
+                            {loading ? <Loader2 className="animate-spin w-6 h-6" /> : <Sparkles className="w-6 h-6" />} 
+                            <span className="text-lg">{loading ? "Designing Your Trip..." : "Generate My Itinerary"}</span>
                         </button>
+                        <p className="text-center text-xs text-gray-400 mt-4 font-medium">
+                          AI-generated plans may vary. Customize your trip later.
+                        </p>
                       </div>
+
                    </form>
                 </div>
             </div>
@@ -111,7 +184,7 @@ function PlannerForm() {
 
       {/* 2. DASHBOARD (Inline, not fixed modal) */}
       {plan && (
-        <div className="pb-12 pt-6">
+        <div className="pb-12 pt-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
             
             {/* Top Navigation / Header context */}
             <div className="max-w-7xl mx-auto px-4 md:px-6 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -126,10 +199,10 @@ function PlannerForm() {
                 </div>
                 
                 <div className="flex items-center gap-3">
-                    <button onClick={() => setPlan(null)} className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-bold text-gray-700 hover:bg-gray-50">
+                    <button onClick={() => setPlan(null)} className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-bold text-gray-700 hover:bg-gray-50 transition-colors">
                         Edit Search
                     </button>
-                    <button className="px-6 py-2 bg-black text-white rounded-lg text-sm font-bold hover:bg-gray-800 shadow-lg">
+                    <button className="px-6 py-2 bg-black text-white rounded-lg text-sm font-bold hover:bg-gray-800 shadow-lg transition-transform hover:scale-105">
                         Save Trip
                     </button>
                 </div>
@@ -222,8 +295,6 @@ function PlannerForm() {
 
                                 <div className="space-y-12">
                                     {plan.itinerary[activeDay - 1]?.activities.map((act, i) => {
-                                        // Simple logic to show label only if it changes could be added here, 
-                                        // but strictly following the design:
                                         let timeLabel = "Morning"; 
                                         const hour = parseInt(act.time.split(':')[0]);
                                         if (hour >= 12) timeLabel = "Afternoon";
