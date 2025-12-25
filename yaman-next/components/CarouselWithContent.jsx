@@ -1,133 +1,136 @@
 "use client";
 
-import { Carousel, Typography, Button } from "@material-tailwind/react";
-import Link from "next/link"; 
+import { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
-export function CarouselWithContent() {
+const slides = [
+  {
+    id: 1,
+    image: "/carousel/elephant1.jpg", 
+    title: "The Heart of Nature",
+    subtitle: "Experience the untamed beauty of Sri Lanka's wildlife.",
+    cta: "Explore Safaris",
+    link: "/packages",
+    align: "center", // <--- 1. Center Align
+  },
+  {
+    id: 2,
+    image: "/carousel/train.jpg", 
+    title: "Scenic Train Journeys",
+    subtitle: "Ride through the misty mountains of Ella.",
+    cta: "View Tours",
+    link: "/packages",
+    align: "left",   // <--- 2. Left Align
+  },
+  {
+    id: 3,
+    image: "/carousel/sigiriya.jpg", 
+    title: "Ancient Wonders",
+    subtitle: "Climb the fortress in the sky.",
+    cta: "Discover History",
+    link: "/packages",
+    align: "right",  // <--- 3. Right Align
+  },
+];
+
+export default function HeroCarousel() {
+  const [current, setCurrent] = useState(0);
+
+  // Auto-slide logic
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const nextSlide = () => {
+    setCurrent(current === slides.length - 1 ? 0 : current + 1);
+  };
+
+  const prevSlide = () => {
+    setCurrent(current === 0 ? slides.length - 1 : current - 1);
+  };
+
   return (
-    <Carousel
-      // carousel settings
-      autoplay={true}
-      loop={true}
-      autoplayDelay={6000}
-      transition={{ duration: 0.8 }} 
-      className="h-[85vh] w-full overflow-hidden" 
-      
-      // Custom Navigation Dots (Bottom center)
-      navigation={({ setActiveIndex, activeIndex, length }) => (
-        <div className="absolute bottom-8 left-1/2 z-50 flex -translate-x-1/2 gap-3">
-          {new Array(length).fill("").map((_, i) => (
-            <span
-              key={i}
-              className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
-                activeIndex === i ? "w-10 bg-orange-500" : "w-4 bg-white/60"
-              }`}
-              onClick={() => setActiveIndex(i)}
+    <div className="relative h-[600px] w-full overflow-hidden bg-gray-900">
+      {slides.map((slide, index) => (
+        <div
+          key={slide.id}
+          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+            index === current ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {/* Background Image */}
+          <div className="absolute inset-0">
+            <img
+              src={slide.image}
+              alt={slide.title}
+              className="h-full w-full object-cover opacity-60" // Darker overlay for better text contrast
             />
-          ))}
-        </div>
-      )}
-    >
-      {/* --- SLIDE 1: ELEPHANT --- */}
-      <div className="relative h-full w-full">
-        {/* Background Image */}
-        <img
-          src="/carousel/elephant1.jpg"
-          alt="Elephant in Sri Lanka"
-          className="h-full w-full object-cover" 
-        />
-        
-        {/* Gradient Overlay (Darker at bottom for text readability) */}
-        <div className="absolute inset-0 grid h-full w-full place-items-center bg-gradient-to-t from-black/80 via-black/30 to-black/30">
-          <div className="w-3/4 text-center md:w-2/4 pt-12">
-            <Typography
-              variant="h1"
-              color="white"
-              className="mb-4 text-4xl md:text-5xl lg:text-6xl font-black tracking-tight"
-            >
-              The Heart of <br/> <span className="text-orange-500">Nature</span>
-            </Typography>
-            <Typography
-              variant="lead"
-              color="white"
-              className="mb-12 opacity-90 text-lg md:text-xl font-light"
-            >
-              Experience the untamed beauty of Sri Lanka's wildlife. 
-              From the gathering of elephants to the leopards of Yala.
-            </Typography>
-            <div className="flex justify-center gap-4">
-              <Button size="lg" color="orange" className="shadow-orange-500/20 hover:scale-105 transition-transform">
-                Explore Safaris
-              </Button>
-            </div>
+            {/* Gradient Overlay for better readability */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
           </div>
-        </div>
-      </div>
 
-      {/* --- SLIDE 2: FISHING (CULTURE) --- */}
-      <div className="relative h-full w-full">
-        <img
-          src="/carousel/ritipanna2.jpg"
-          alt="Stilt Fishing"
-          className="h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 grid h-full w-full items-center bg-black/40">
-          <div className="w-3/4 pl-8 md:w-2/4 md:pl-20 lg:pl-32">
-            <Typography
-              variant="h1"
-              color="white"
-              className="mb-4 text-4xl md:text-5xl lg:text-6xl font-black"
-            >
-              Timeless <br/> <span className="text-blue-400">Traditions</span>
-            </Typography>
-            <Typography
-              variant="lead"
-              color="white"
-              className="mb-12 opacity-90 text-lg md:text-xl font-light"
-            >
-              Immerse yourself in a culture that has thrived for thousands of years.
-              Discover the iconic stilt fishermen at sunset.
-            </Typography>
-            <div className="flex gap-4">
-               <Button size="lg" color="white" className="text-gray-900 hover:bg-gray-200">
-                View Gallery
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+          {/* Content Container - Dynamic Alignment */}
+          <div className={`relative z-10 flex h-full flex-col justify-center px-6 sm:px-16 lg:px-24
+            ${
+              slide.align === "center"
+                ? "items-center text-center"
+                : slide.align === "right"
+                ? "items-end text-right"
+                : "items-start text-left" // Default to Left
+            }
+          `}>
+            
+            {/* Title: Reduced weight from extrabold to bold */}
+            <h1 className="mb-4 text-4xl font-bold text-white sm:text-5xl md:text-6xl drop-shadow-lg leading-tight max-w-3xl">
+              {slide.title}
+            </h1>
 
-      {/* --- SLIDE 3: TRAIN (ADVENTURE) --- */}
-      <div className="relative h-full w-full">
-        <img
-          src="/carousel/train.jpg"
-          alt="Ella Train"
-          className="h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 grid h-full w-full items-end bg-gradient-to-t from-black/90 via-transparent to-transparent">
-          <div className="w-full pb-20 pl-8 md:pl-20 lg:pl-32 pr-8">
-            <Typography
-              variant="h1"
-              color="white"
-              className="mb-4 text-4xl md:text-5xl lg:text-6xl font-black"
+            {/* Subtitle */}
+            <p className="mb-8 text-lg text-gray-200 sm:text-xl md:text-2xl drop-shadow-md max-w-2xl">
+              {slide.subtitle}
+            </p>
+
+            {/* Button */}
+            <Link
+              href={slide.link}
+              className="rounded-full bg-orange-500 px-8 py-3 text-lg font-semibold text-white transition-transform hover:bg-orange-600 hover:scale-105 shadow-xl"
             >
-              Journeys <br/> Beyond <span className="text-green-400">Roads</span>
-            </Typography>
-            <Typography
-              variant="lead"
-              color="white"
-              className="mb-10 opacity-90 text-lg md:text-xl font-light max-w-2xl"
-            >
-              Take the world's most scenic train ride through the misty tea plantations of Ella.
-            </Typography>
-             <Button size="lg" color="green" className="shadow-green-500/20">
-                Book Tickets
-              </Button>
+              {slide.cta}
+            </Link>
           </div>
         </div>
+      ))}
+
+      {/* Navigation Arrows */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/30 p-2 text-white hover:bg-black/50 backdrop-blur-sm transition-all"
+      >
+        <ChevronLeft className="h-8 w-8" />
+      </button>
+      <button
+        onClick={nextSlide}
+        className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/30 p-2 text-white hover:bg-black/50 backdrop-blur-sm transition-all"
+      >
+        <ChevronRight className="h-8 w-8" />
+      </button>
+
+      {/* Dots Indicator */}
+      <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-3">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrent(index)}
+            className={`h-3 w-3 rounded-full transition-all ${
+              index === current ? "bg-orange-500 w-8" : "bg-white/50 hover:bg-white"
+            }`}
+          />
+        ))}
       </div>
-    </Carousel>
+    </div>
   );
 }
-
-export default CarouselWithContent;
