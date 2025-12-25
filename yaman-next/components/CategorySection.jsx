@@ -5,12 +5,12 @@ import { motion } from "framer-motion";
 const categories = [
   {
     title: "Beaches",
-    image: "/beach1.jpg", // Make sure this is in your public folder
+    image: "/beach.jpg", 
     count: "12 Destinations",
   },
   {
     title: "Wildlife",
-    image: "/safari.jpg",
+    image: "/tiger.jpg",
     count: "5 Parks",
   },
   {
@@ -20,7 +20,7 @@ const categories = [
   },
   {
     title: "Adventure",
-    image: "/adventure.jpg", // If you don't have this, use a different image
+    image: "/rafting.jpg", 
     count: "15 Activities",
   },
 ];
