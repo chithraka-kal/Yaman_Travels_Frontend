@@ -38,7 +38,7 @@ const destinations = [
   },
   {
     id: 5,
-    image: "/beach1.jpg", // Ensure this image is in /public or change path
+    image: "/mirissa.jpg", 
     title: "Mirissa Beach",
     location: "Mirissa, Sri Lanka",
     price: "$120",
