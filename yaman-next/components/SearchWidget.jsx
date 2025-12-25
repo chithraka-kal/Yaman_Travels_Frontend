@@ -72,32 +72,37 @@ export default function SearchWidget() {
         <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-12 gap-5 items-end">
           
           {/* STATIC FIELD: DESTINATION */}
-          <div className="md:col-span-4 space-y-2">
-            <label className={`text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-colors duration-500 ${activeTab === 'ai' ? 'text-purple-500' : 'text-orange-500'}`}>
-              <MapPin className="w-4 h-4" /> Where to?
-            </label>
-            <input
-              type="text"
-              required
-              placeholder="e.g. Ella, Sigiriya"
-              className={`w-full p-4 rounded-2xl border outline-none font-bold text-gray-700 transition-all duration-500
-                ${activeTab === 'ai' 
-                  ? 'bg-purple-50/50 focus:ring-2 focus:ring-purple-500 border-purple-100 placeholder-purple-300' 
-                  : 'bg-gray-50 focus:ring-2 focus:ring-orange-500 border-gray-100 placeholder-gray-400'}`}
-              value={destination}
-              onChange={(e) => setDestination(e.target.value)}
-            />
+          {/* Changed: Added relative h-[86px] wrapper and flex-col justify-end to align with dynamic fields */}
+          <div className="md:col-span-3">
+            <div className="relative h-[86px]">
+               <div className="flex flex-col justify-end h-full">
+                  <label className={`text-xs font-bold uppercase tracking-wider flex items-center gap-2 mb-2 transition-colors duration-500 ${activeTab === 'ai' ? 'text-purple-500' : 'text-orange-500'}`}>
+                    <MapPin className="w-4 h-4" /> Where to?
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Ella, Sigiriya"
+                    className={`w-full p-4 rounded-2xl border outline-none font-bold text-gray-700 transition-all duration-500
+                      ${activeTab === 'ai' 
+                        ? 'bg-purple-50/50 focus:ring-2 focus:ring-purple-500 border-purple-100 placeholder-purple-300' 
+                        : 'bg-gray-50 focus:ring-2 focus:ring-orange-500 border-gray-100 placeholder-gray-400'}`}
+                    value={destination}
+                    onChange={(e) => setDestination(e.target.value)}
+                  />
+               </div>
+            </div>
           </div>
 
-          {/* DYNAMIC FIELDS - USING CSS OPACITY TRANSITION INSTEAD OF MOUNT/UNMOUNT */}
-          {/* We keep the layout identical to prevent jumping */}
+          {/* DYNAMIC FIELDS */}
           
           {/* Middle Field */}
           <div className="md:col-span-3 space-y-2">
-            <div className="relative h-[86px]"> {/* Fixed height container to prevent jumps */}
+            <div className="relative h-[86px]"> 
                 
                 {/* Layer 1: Date (Search Mode) */}
-                <div className={`absolute inset-0 transition-all duration-500 ease-in-out ${activeTab === 'search' ? 'opacity-100 translate-y-0 z-10' : 'opacity-0 translate-y-4 -z-10'}`}>
+                {/* Added: flex flex-col justify-end to anchor input to bottom */}
+                <div className={`absolute inset-0 flex flex-col justify-end transition-all duration-500 ease-in-out ${activeTab === 'search' ? 'opacity-100 translate-y-0 z-10' : 'opacity-0 translate-y-4 -z-10'}`}>
                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2 mb-2">
                         <Calendar className="w-4 h-4 text-orange-500" /> Date
                     </label>
@@ -110,7 +115,7 @@ export default function SearchWidget() {
                 </div>
 
                 {/* Layer 2: Duration (AI Mode) */}
-                <div className={`absolute inset-0 transition-all duration-500 ease-in-out ${activeTab === 'ai' ? 'opacity-100 translate-y-0 z-10' : 'opacity-0 translate-y-4 -z-10'}`}>
+                <div className={`absolute inset-0 flex flex-col justify-end transition-all duration-500 ease-in-out ${activeTab === 'ai' ? 'opacity-100 translate-y-0 z-10' : 'opacity-0 translate-y-4 -z-10'}`}>
                     <label className="text-xs font-bold text-purple-500 uppercase tracking-wider flex items-center gap-2 mb-2">
                         <Clock className="w-4 h-4" /> Duration
                     </label>
@@ -130,11 +135,11 @@ export default function SearchWidget() {
           </div>
 
           {/* Right Field */}
-          <div className="md:col-span-2 space-y-2">
+          <div className="md:col-span-3 space-y-2">
             <div className="relative h-[86px]">
                 
                 {/* Layer 1: Guests (Search Mode) */}
-                <div className={`absolute inset-0 transition-all duration-500 ease-in-out ${activeTab === 'search' ? 'opacity-100 translate-y-0 z-10' : 'opacity-0 translate-y-4 -z-10'}`}>
+                <div className={`absolute inset-0 flex flex-col justify-end transition-all duration-500 ease-in-out ${activeTab === 'search' ? 'opacity-100 translate-y-0 z-10' : 'opacity-0 translate-y-4 -z-10'}`}>
                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2 mb-2">
                         <Users className="w-4 h-4 text-orange-500" /> Guests
                     </label>
@@ -151,7 +156,7 @@ export default function SearchWidget() {
                 </div>
 
                  {/* Layer 2: Budget (AI Mode) */}
-                 <div className={`absolute inset-0 transition-all duration-500 ease-in-out ${activeTab === 'ai' ? 'opacity-100 translate-y-0 z-10' : 'opacity-0 translate-y-4 -z-10'}`}>
+                 <div className={`absolute inset-0 flex flex-col justify-end transition-all duration-500 ease-in-out ${activeTab === 'ai' ? 'opacity-100 translate-y-0 z-10' : 'opacity-0 translate-y-4 -z-10'}`}>
                     <label className="text-xs font-bold text-purple-500 uppercase tracking-wider flex items-center gap-2 mb-2">
                         <Wallet className="w-4 h-4" /> Budget
                     </label>
@@ -171,7 +176,6 @@ export default function SearchWidget() {
 
           {/* ACTION BUTTON */}
           <div className="md:col-span-3">
-             {/* We use a fixed height div to align bottom with inputs */}
              <div className="h-[58px] relative">
                 <button
                 type="submit"
