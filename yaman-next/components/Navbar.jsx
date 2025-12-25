@@ -28,8 +28,8 @@ export default function Navbar() {
             <img 
               src="/logo.png" 
               alt="Yaman Travels" 
-              width={100} 
-              height={100} 
+              width={80} 
+              height={80} 
               className="rounded-full border border-gray-100 shadow-sm"
             />
           </Link>
