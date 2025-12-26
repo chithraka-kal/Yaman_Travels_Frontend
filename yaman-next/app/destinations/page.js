@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import PageHeader from "../../components/PageHeader"; 
 import { MapPin, Filter, Loader2 } from "lucide-react";
 
-export default function Destinations() {
+function DestinationsContent() {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get('category');
   const resultsRef = useRef(null);
@@ -24,12 +24,19 @@ export default function Destinations() {
         const data = await res.json();
         
         // --- FIX IS HERE ---
-        // Your API returns { destinations: [...] }
-        if (data.destinations) {
-          setDestinations(data.destinations);
+        // We check: Is it an array? OR Does it have a 'destinations' property that is an array?
+        if (Array.isArray(data)) {
+           setDestinations(data);
+        } else if (data.destinations && Array.isArray(data.destinations)) {
+           setDestinations(data.destinations);
+        } else {
+           console.warn("API returned unexpected format:", data);
+           setDestinations([]); // Default to empty array to prevent crash
         }
+
       } catch (error) {
         console.error("Failed to fetch destinations:", error);
+        setDestinations([]); // Safety fallback
       } finally {
         setLoading(false);
       }
@@ -38,18 +45,20 @@ export default function Destinations() {
     fetchDestinations();
   }, []);
 
-  // 2. Memoize Categories based on fetched data
+  // 2. Memoize Categories (Added safety check ?. just in case)
   const categories = useMemo(() => {
     if (loading) return ["All"];
-    // Using Set to get unique tags
-    return ["All", ...new Set(destinations.map((item) => item.tag))];
+    // Ensure destinations is an array before mapping
+    const safeList = Array.isArray(destinations) ? destinations : [];
+    return ["All", ...new Set(safeList.map((item) => item.tag))];
   }, [destinations, loading]);
   
-  // 3. Filter Logic
+  // 3. Filter Logic (Added safety check)
   const filteredDestinations = useMemo(() => {
+    const safeList = Array.isArray(destinations) ? destinations : [];
     return selectedCategory === "All"
-      ? destinations
-      : destinations.filter((place) => place.tag === selectedCategory);
+      ? safeList
+      : safeList.filter((place) => place.tag === selectedCategory);
   }, [selectedCategory, destinations]);
 
   // --- CUSTOM SMOOTH SCROLL ---
@@ -79,7 +88,7 @@ export default function Destinations() {
   };
 
   useEffect(() => {
-    if (initialCategory) {
+    if (initialCategory && !loading) {
       setSelectedCategory(initialCategory);
       if (resultsRef.current) {
         setTimeout(() => {
@@ -87,7 +96,7 @@ export default function Destinations() {
         }, 100);
       }
     }
-  }, [initialCategory]);
+  }, [initialCategory, loading]);
 
   return (
     <div className="bg-white min-h-screen pb-20">
@@ -114,7 +123,6 @@ export default function Destinations() {
               {/* Category Buttons */}
               <div className="flex flex-row lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0 scrollbar-hide">
                 {loading ? (
-                   // Simple Skeleton Loading for buttons
                    [1,2,3].map(i => <div key={i} className="h-10 bg-gray-100 rounded-lg animate-pulse w-full"></div>)
                 ) : (
                   categories.map((category) => (
@@ -147,7 +155,7 @@ export default function Destinations() {
                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                    {filteredDestinations.map((place) => (
                      <div 
-                       key={place._id} /* Use _id from MongoDB - Correct! */
+                       key={place._id} 
                        className="group rounded-2xl overflow-hidden shadow-lg bg-white border border-gray-100 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
                      >
                         <div className="relative h-56 overflow-hidden">
@@ -192,5 +200,13 @@ export default function Destinations() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function DestinationsPage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center pt-20"><Loader2 className="w-10 h-10 animate-spin text-orange-500"/></div>}>
+      <DestinationsContent />
+    </Suspense>
   );
 }

@@ -1,0 +1,35 @@
+services:
+  app:
+    container_name: yaman_travels_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    
+    # ✅ 1. This loads the key from the file securely
+    env_file:
+      - .env.local
+
+   
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/yaman_travels
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=my_super_secret_key_123
+      - NODE_ENV=production
+      
+    depends_on:
+      - mongo
+
+  mongo:
+    container_name: yaman_travels_db
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
