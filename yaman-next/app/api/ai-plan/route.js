@@ -6,16 +6,20 @@ export async function POST(req) {
     const { from, destination, days, budget, interests } = await req.json();
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
+    // ✅ 1. Use the working Lite model & Enable JSON Mode
+    const model = genAI.getGenerativeModel({ 
+      model: "gemini-2.5-flash-lite", 
+      generationConfig: { responseMimeType: "application/json" } 
+    });
+
+    // ✅ 2. Cleaned up prompt (Removed "no markdown" instructions as JSON mode handles it)
     const prompt = `
       You are an expert travel planner for Sri Lanka.
       Plan a ${days}-day trip to ${destination} starting from ${from}.
       Budget Level: ${budget}
       Interests: ${interests}
 
-      Return a raw JSON object with NO markdown formatting.
-      
       Structure:
       {
         "tripTitle": "Catchy Trip Name",
@@ -43,19 +47,21 @@ export async function POST(req) {
              "image": "Real Unsplash URL for this specific activity",
              "description": "One sentence marketing hook"
            },
-           { "title": "Another Package", ... } 
+           { "title": "Another Package", "rating": 4.5, "price": "$...", "image": "...", "description": "..." } 
            // Give exactly 3 suggestions
         ]
       }
     `;
 
     const result = await model.generateContent(prompt);
-    const text = result.response.text().replace(/```json/g, "").replace(/```/g, "").trim();
     
-    return NextResponse.json(JSON.parse(text));
+    // ✅ 3. Parse directly (No regex needed thanks to JSON mode)
+    const plan = JSON.parse(result.response.text());
+    
+    return NextResponse.json(plan);
 
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ message: "Failed" }, { status: 500 });
+    console.error("AI Plan Error:", error);
+    return NextResponse.json({ message: "Failed to generate plan" }, { status: 500 });
   }
 }
